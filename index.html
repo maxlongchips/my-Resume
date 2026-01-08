@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人简历 | Resume & Blog</title>
+    <style>
+        /* --- 全局变量与基础设置 --- */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --secondary-text: #666666;
+            --accent-color: #2563eb; /* 科技蓝 */
+            --card-bg: #f9fafb;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --max-width: 900px;
+        }
+
+        /* 深色模式变量 */
+        body.dark-mode {
+            --bg-color: #111827;
+            --text-color: #f3f4f6;
+            --secondary-text: #9ca3af;
+            --accent-color: #60a5fa;
+            --card-bg: #1f2937;
+            --border-color: #374151;
+            --hover-bg: #374151;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        a { text-decoration: none; color: var(--accent-color); transition: opacity 0.2s; }
+        a:hover { opacity: 0.8; }
+
+        /* --- 布局容器 --- */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* --- 头部 (Header) --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .profile { display: flex; align-items: center; gap: 20px; }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--border-color); /* 占位色 */
+            object-fit: cover;
+            border: 2px solid var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .profile-info h1 { font-size: 1.8rem; margin-bottom: 5px; line-height: 1.2; }
+        .profile-info p { color: var(--secondary-text); font-size: 1rem; }
+
+        .nav-actions { display: flex; gap: 15px; align-items: center; }
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .theme-toggle:hover { background: var(--hover-bg); }
+
+        /* --- 通用章节样式 --- */
+        section { margin-bottom: 60px; }
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 24px;
+            background-color: var(--accent-color);
+            margin-right: 12px;
+            border-radius: 3px;
+        }
+
+        /* --- 技能标签 (Skills) --- */
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .skill-tag {
+            background-color: var(--card-bg);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+        }
+
+        /* --- 项目经验 (详细版 - 新增部分) --- */
+        .project-detail {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        /* 鼠标放上去有轻微浮起效果 */
+        .project-detail:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.1); 
+        }
+
+        .project-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .project-head h3 { font-size: 1.25rem; margin: 0; color: var(--text-color); }
+        .project-time { font-size: 0.9rem; color: var(--secondary-text); font-family: monospace; }
+
+        .project-tech-stack {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+            background: rgba(37, 99, 235, 0.08); /* 非常淡的蓝色背景 */
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+        
+        /* 深色模式下微调技术栈背景 */
+        body.dark-mode .project-tech-stack { background: rgba(96, 165, 250, 0.15); }
+
+        .project-desc-list { list-style: none; padding: 0; }
+        .project-desc-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+        .project-desc-list li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        .highlight { font-weight: bold; color: var(--accent-color); margin: 0 2px; }
+
+        /* --- 工作经历 (Timeline 极简版) --- */
+        .timeline-item {
+            display: flex;
+            padding-bottom: 30px;
+            border-left: 2px solid var(--border-color);
+            padding-left: 25px;
+            position: relative;
+        }
+        .timeline-item:last-child { border-left: 2px solid transparent; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            border: 2px solid var(--bg-color); /* 形成空心圆环效果 */
+        }
+        .timeline-content { width: 100%; }
+        .timeline-role { font-weight: bold; font-size: 1.1rem; display: block; }
+        .timeline-company { color: var(--text-color); }
+        .timeline-date { color: var(--secondary-text); font-size: 0.9rem; margin-bottom: 8px; display: block; }
+
+        /* --- 个人作品/开源 (Grid) --- */
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .repo-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .repo-card h3 { font-size: 1.1rem; margin-bottom: 10px; }
+        .repo-card p { font-size: 0.9rem; color: var(--secondary-text); margin-bottom: 15px; }
+
+        /* --- 博客列表 --- */
+        .blog-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            transition: padding-left 0.2s;
+        }
+        .blog-item:hover { padding-left: 10px; background-color: var(--hover-bg); border-radius: 4px; border-bottom: 1px solid transparent;}
+        .blog-date { font-size: 0.85rem; color: var(--secondary-text); white-space: nowrap; margin-left: 15px; }
+
+        /* --- 页脚 --- */
+        footer {
+            text-align: center;
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin-top: 80px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 30px;
+        }
+
+        /* --- 移动端适配 --- */
+        @media (max-width: 600px) {
+            header { flex-direction: column; text-align: center; gap: 20px; }
+            .profile { flex-direction: column; }
+            .project-head { flex-direction: column; gap: 5px; }
+            .blog-item { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .blog-date { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 头部信息 -->
+        <header>
+            <div class="profile">
+                <!-- 这里的图片链接建议换成你的 GitHub 头像 -->
+                <img src="https://ui-avatars.com/api/?name=User&background=2563eb&color=fff&size=150" alt="Avatar" class="avatar">
+                <div class="profile-info">
+                    <h1>张三 (Your Name)</h1>
+                    <p>全栈开发工程师 | 3年经验 | 坐标北京</p>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+                <a href="mailto:your@email.com">Email</a>
+                <button class="theme-toggle" onclick="toggleTheme()">🌗 模式</button>
+            </div>
+        </header>
+
+        <!-- 简介 -->
+        <section id="about">
+            <h2>关于我</h2>
+            <p>你好！我是一名热衷于构建高性能 Web 应用的开发者。我擅长解决复杂的前端工程化问题，对后端架构也有深入理解。不仅追求代码的整洁，更看重产品的用户体验。</p>
+        </section>
+
+        <!-- 技能栈 -->
+        <section id="skills">
+            <h2>技术栈</h2>
+            <div class="skills-grid">
+                <span class="skill-tag">JavaScript / TypeScript</span>
+                <span class="skill-tag">Vue3全家桶</span>
+                <span class="skill-tag">React.js</span>
+                <span class="skill-tag">Node.js / Koa</span>
+                <span class="skill-tag">MySQL / Redis</span>
+                <span class="skill-tag">Docker / K8s</span>
+                <span class="skill-tag">Three.js</span>
+            </div>
+        </section>
+
+        <!-- 核心重点：详细项目经验 -->
+        <section id="project-experience">
+            <h2>重点项目经历</h2>
+
+            <!-- 项目 1 -->
+            <div class="project-detail">
+                <div class="project-head">
+                    <h3>🚀 企业级大数据可视化大屏</h3>
+                    <span class="project-time">2023.06 - 2023.12</span>
+                </div>
+                <!-- 这一行让HR一眼看到你会什么 -->
+                <div class="project-tech-stack">技术栈：Vue3, TypeScript, ECharts, WebSocket</div>
+                
+                <ul class="project-desc-list">
+                    <li><strong>项目背景：</strong> 为集团总部开发的实时监控大屏，需在 4K 分辨率下展示全国业务数据。</li>
+                    <li><strong>核心难点：</strong> 海量数据导致页面卡顿（FPS低于20），以及实时通讯的稳定性。</li>
+                    <li><strong>我的行动：</strong>
+                        <ul>
+                            <li>针对地图渲染瓶颈，采用 <span class="highlight">Canvas</span> 替代 SVG 渲染，性能提升 200%。</li>
+                            <li>封装了具有心跳检测和断线重连机制的 WebSocket 模块，确保数据零丢失。</li>
+                            <li>实现组件按需加载和静态资源 CDN 加速，首屏加载时间从 3s 降至 <span class="highlight">0.8s</span>。</li>
+                        </ul>
+                    </li>
+                    <li><strong>最终成果：</strong> 系统平稳运行半年无事故，获得集团年度技术创新奖。</li>
+                </ul>
+            </div>
+
+            <!-- 项目 2 -->
+            <div class="project-detail">
+                <div class="project-head">
+                    <h3>🛠️ 内部低代码搭建平台 (LowCode-Engine)</h3>
+                    <span class="project-time">2022.01 - 2022.05</span>
+                </div>
+                <div class="project-tech-stack">技术栈：React, Redux, JSON-Schema, Node.js</div>
+                
+                <ul class="project-desc-list">
+                    <li><strong>项目描述：</strong> 针对运营活动页需求频繁变动的问题，开发了一套拖拽式生成页面的工具。</li>
+                    <li><strong>我的贡献：</strong>
+                        <ul>
+                            <li>设计了基于 <span class="highlight">JSON-Schema</span> 的组件协议，实现了组件的跨平台渲染。</li>
+                            <li>开发了可视化编辑器核心模块，支持组件拖拽、嵌套、属性配置。</li>
+                            <li>编写了完善的 CI/CD 脚本，实现了一键发布上线。</li>
+                        </ul>
+                    </li>
+                    <li><strong>数据表现：</strong> 运营人员自行搭建页面效率提升 <span class="highlight">80%</span>，研发不再介入简单活动页开发。</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 工作履历 (简单时间轴，避免重复) -->
+        <section id="experience">
+            <h2>工作履历</h2>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-role">高级前端工程师</span>
+                    <span class="timeline-company">北京某某科技有限公司</span>
+                    <span class="timeline-date">2022.06 - 至今</span>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-role">Web 开发工程师</span>
+                    <span class="timeline-company">上海某某网络工作室</span>
+                    <span class="timeline-date">2020.07 - 2022.05</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 个人作品/开源 -->
+        <section id="portfolio">
+            <h2>个人作品 & 开源</h2>
+            <div class="repo-grid">
+                <div class="repo-card">
+                    <h3>Resume-Blog-Generator</h3>
+                    <p>一个轻量级的个人简历生成器，纯 HTML/CSS 实现，支持深色模式。</p>
+                    <a href="#">查看源码 →</a>
+                </div>
+                <div class="repo-card">
+                    <h3>My-Tiny-Vue</h3>
+                    <p>手写 Vue3 核心原理的 mini 版本，实现了响应式系统和虚拟 DOM。</p>
+                    <a href="#">查看源码 →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 博客文章 -->
+        <section id="blog">
+            <h2>最近思考</h2>
+            <div class="blog-list">
+                <a href="#" class="blog-item">
+                    <span class="blog-title">深入理解浏览器渲染原理与性能优化</span>
+                    <span class="blog-date">2023-10-24</span>
+                </a>
+                <a href="#" class="blog-item">
+                    <span class="blog-title">从零开始搭建企业级前端工程化规范</span>
+                    <span class="blog-date">2023-09-15</span>
+                </a>
+                <a href="#" class="blog-item">
+                    <span class="blog-title">为什么我选择 TypeScript 重构老项目？</span>
+                    <span class="blog-date">2023-08-01</span>
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 Your Name. Powered by GitHub Pages.</p>
+        </footer>
+    </div>
+
+    <script>
+        // 深色模式切换逻辑
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // 初始化
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        } else if (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // 如果用户没设置过，且系统是深色模式，自动跟随
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
